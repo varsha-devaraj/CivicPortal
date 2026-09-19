@@ -1,0 +1,176 @@
+﻿{
+  "info": {
+    "_postman_id": "civic-complaint-system-2026",
+    "name": "CivicReport - Online Complaint Management APIs",
+    "description": "Comprehensive Postman collection for testing the Online Complaint Registration and Management System APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register Citizen",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ananya Sen\",\n  \"email\": \"ananya@example.com\",\n  \"phone\": \"9876543230\",\n  \"address\": \"Apt 404, Palm Heights, Park Road\",\n  \"password\": \"Citizen@123\",\n  \"confirmPassword\": \"Citizen@123\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/auth/register", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Staff",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"staff@example.com\",\n  \"password\": \"Staff@123\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Citizen",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"citizen@example.com\",\n  \"password\": \"Citizen@123\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Complaints (Citizen)",
+      "item": [
+        {
+          "name": "Create New Complaint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "category", "value": "Street Light", "type": "text" },
+                { "key": "title", "value": "High mast street light damaged", "type": "text" },
+                { "key": "description", "value": "Light pole has broken glass and wire sparks during rain.", "type": "text" },
+                { "key": "location", "value": "Gandhi Circle, Ward 2", "type": "text" },
+                { "key": "landmark", "value": "Near Bus Shelter", "type": "text" }
+              ]
+            },
+            "url": { "raw": "http://localhost:3000/api/complaints", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "complaints"] }
+          }
+        },
+        {
+          "name": "Get My Complaints",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/complaints?category=all&status=all", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "complaints"] }
+          }
+        },
+        {
+          "name": "Track Complaint by ID (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:3000/api/complaints/track/CMP-2026-0001", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "complaints", "track", "CMP-2026-0001"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Admin Management",
+      "item": [
+        {
+          "name": "Get Admin Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "http://localhost:3000/api/admin/stats", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "admin", "stats"] }
+          }
+        },
+        {
+          "name": "Get All Complaints (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "http://localhost:3000/api/admin/complaints?category=all&status=all", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "admin", "complaints"] }
+          }
+        },
+        {
+          "name": "Get Staff List",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "http://localhost:3000/api/admin/staff", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "admin", "staff"] }
+          }
+        },
+        {
+          "name": "Assign Staff to Complaint",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staff_id\": \"{{staff_mongo_id}}\",\n  \"remarks\": \"Assigned to electrical response unit\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/admin/complaints/{{complaint_mongo_id}}/assign", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "admin", "complaints", "{{complaint_mongo_id}}", "assign"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Staff Operations",
+      "item": [
+        {
+          "name": "Get Assigned Complaints (Staff)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staff_token}}" }],
+            "url": { "raw": "http://localhost:3000/api/staff/complaints", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "staff", "complaints"] }
+          }
+        },
+        {
+          "name": "Update Status & Remarks (Staff)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Resolved\",\n  \"remarks\": \"Pole replaced with new 120W LED fitting and verified operational.\"\n}"
+            },
+            "url": { "raw": "http://localhost:3000/api/staff/complaints/{{complaint_mongo_id}}/status", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "staff", "complaints", "{{complaint_mongo_id}}", "status"] }
+          }
+        }
+      ]
+    }
+  ]
+}
