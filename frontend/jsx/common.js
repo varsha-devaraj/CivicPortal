@@ -1,7 +1,5 @@
 ﻿// CivicReport Common Utility Library
-const API_BASE = window.location.origin.includes(':3000') || window.location.origin.includes(':3001')
-  ? '' 
-  : 'http://localhost:3000';
+const API_BASE = "https://civicportal-rvn1.onrender.com/";
 
 function getToken() {
   return localStorage.getItem('civic_token');
